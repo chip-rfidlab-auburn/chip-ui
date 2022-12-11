@@ -15,8 +15,20 @@ import {
 } from "react-bootstrap";
 
 import 'assets/css/custom.css'
+import { Connect } from "assets/js/web3";
+import axios from "axios";
+import { BACKEND_URL } from "assets/js/constants";
 
 function CreateIdentity() {
+  const [key, setKey] = React.useState(key);
+
+  const create = async () => {
+    const accounts = await Connect();
+    if(accounts.length > 0) {
+      const {data} = await axios.get(`${BACKEND_URL}/identity/create/${accounts[0]}`);
+      setKey(data.publicKey);
+    }
+  }
   return (
     <>
       <Container fluid>
@@ -48,11 +60,23 @@ function CreateIdentity() {
                           <p className="ms-font">Your private key remains is secret and is currently managed by the platform. It is used to decrypt documents that were encrypted for you. </p>
                         </Col>
                       </Row>
+                      {key ? 
+                        
+                        <Row style={{marginTop:'3%'}} >
+                          <Col xs="12" >
+                            <h5 className="ms-font bold">Your key:</h5>
+                            <p className="ms-font">kty: {key.kty}</p>
+                            <p className="ms-font">crv: {key.crv}</p>
+                            <p className="ms-font">x: {key.x}</p>
+                            <p className="ms-font">y: {key.y}</p>
+                          </Col>
+                        </Row>
+                        : <></> }
                       <div className="text-center">
                         <Button
                           className="btn-fill pull-right"
-                          type="submit"
                           variant="warning"
+                          onClick={() => create()}
                         >
                           Create Identity
                         </Button>

@@ -1,0 +1,164 @@
+{
+    "CONTRACT": "0xd5efd51AF4C89176493378A9E68d9745A776f16F",
+    "ABI": [
+        {
+            "inputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "_supplyChainId",
+                    "type": "uint256"
+                },
+                {
+                    "internalType": "string",
+                    "name": "_reference",
+                    "type": "string"
+                }
+            ],
+            "name": "addEpcisRecords",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "string",
+                    "name": "_ipfsCID",
+                    "type": "string"
+                }
+            ],
+            "name": "createIdentity",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "_id",
+                    "type": "uint256"
+                },
+                {
+                    "internalType": "uint256",
+                    "name": "_documentId",
+                    "type": "uint256"
+                }
+            ],
+            "name": "getDocument",
+            "outputs": [
+                {
+                    "internalType": "string",
+                    "name": "",
+                    "type": "string"
+                },
+                {
+                    "internalType": "address",
+                    "name": "",
+                    "type": "address"
+                },
+                {
+                    "internalType": "address",
+                    "name": "",
+                    "type": "address"
+                },
+                {
+                    "internalType": "string",
+                    "name": "",
+                    "type": "string"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "address",
+                    "name": "_addr",
+                    "type": "address"
+                }
+            ],
+            "name": "getIdentity",
+            "outputs": [
+                {
+                    "internalType": "string",
+                    "name": "",
+                    "type": "string"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [],
+            "name": "getSupplyChainId",
+            "outputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "",
+                    "type": "uint256"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "_id",
+                    "type": "uint256"
+                }
+            ],
+            "name": "getSupplyChainInformation",
+            "outputs": [
+                {
+                    "internalType": "string",
+                    "name": "",
+                    "type": "string"
+                },
+                {
+                    "internalType": "uint256",
+                    "name": "",
+                    "type": "uint256"
+                }
+            ],
+            "stateMutability": "view",
+            "type": "function"
+        },
+        {
+            "inputs": [
+                {
+                    "internalType": "uint256",
+                    "name": "_supplyChainId",
+                    "type": "uint256"
+                },
+                {
+                    "internalType": "string",
+                    "name": "_ipfsCID",
+                    "type": "string"
+                },
+                {
+                    "internalType": "address",
+                    "name": "_decryptBy",
+                    "type": "address"
+                },
+                {
+                    "internalType": "string",
+                    "name": "_documentType",
+                    "type": "string"
+                },
+                {
+                    "internalType": "string",
+                    "name": "_status",
+                    "type": "string"
+                }
+            ],
+            "name": "updateSupplyChainMovement",
+            "outputs": [],
+            "stateMutability": "nonpayable",
+            "type": "function"
+        }
+    ]
+}
