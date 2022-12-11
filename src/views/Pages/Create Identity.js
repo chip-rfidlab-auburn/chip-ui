@@ -14,24 +14,47 @@ import {
   Col
 } from "react-bootstrap";
 
+import SweetAlert from "react-bootstrap-sweetalert";
+
 import 'assets/css/custom.css'
 import { Connect } from "assets/js/web3";
 import axios from "axios";
 import { BACKEND_URL } from "assets/js/constants";
+import { createIdentity } from "assets/js/web3";
 
 function CreateIdentity() {
   const [key, setKey] = React.useState(key);
+  const [success, setSuccess] = React.useState(false);
 
   const create = async () => {
+  
     const accounts = await Connect();
     if(accounts.length > 0) {
       const {data} = await axios.get(`${BACKEND_URL}/identity/create/${accounts[0]}`);
       setKey(data.publicKey);
+      const hash = await createIdentity(data.publicKey, accounts[0]);
+      setAlert(true);
+      
     }
+  
   }
+
+  const hideAlert = () => window.location.href = "/admin/dashboard"
+
   return (
     <>
       <Container fluid>
+        {success ? 
+        <SweetAlert
+          success
+          style={{ display: "block", marginTop: "-100px" }}
+          title="Success!"
+          onConfirm={() => hideAlert()}
+          onCancel={() => hideAlert()}
+          confirmBtnBsStyle="info"
+        >
+          Successfully created your identity
+        </SweetAlert> : <></> }
         <div className="section-image ms-font" data-image="../../assets/img/bg5.jpg" >
           {/* you can change the color of the filter page using: data-color="blue | purple | green | orange | red | rose " */}
           <Container>
