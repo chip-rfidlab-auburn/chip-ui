@@ -21,6 +21,7 @@ import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "assets/scss/light-bootstrap-dashboard-pro-react.scss?v=2.0.0";
+import "assets/css/custom.css";
 import "assets/css/demo.css";
 
 import AuthLayout from "layouts/Auth.js";

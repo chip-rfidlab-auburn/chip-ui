@@ -41,8 +41,7 @@ function AuthFooter() {
             </ul>
             <p className="copyright text-center m-0">
               © {new Date().getFullYear()}{" "}
-              <a href="http://www.creative-tim.com">Creative Tim</a>, made with
-              love for a better web
+              <a href="http://www.rfid.auburn.edu">RFID Lab @ Auburn University</a>
             </p>
           </nav>
         </Container>

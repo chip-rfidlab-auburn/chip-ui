@@ -46,8 +46,7 @@ function AdminFooter() {
             </ul>
             <p className="copyright text-center">
               © <script>document.write(new Date().getFullYear())</script>
-              <a href="http://www.creative-tim.com">Creative Tim</a>, made with
-              love for a better web
+              <a href="http://www.rfid.auburn.edu">RFID Lab at Auburn University</a>
             </p>
           </nav>
         </Container>

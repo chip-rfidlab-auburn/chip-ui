@@ -267,7 +267,43 @@ var routes = [
       }
       */
     ]
-  }
+  },
+  {
+    collapse: true,
+    path: "/chip",
+    name: "CHIP",
+    icon: "nc-icon nc-app",
+    views: [
+      {
+        path: "/create-identity",
+        layout: "/admin",
+        name: "Add an Item",
+        mini: "AI",
+        component: CreateIdentity
+      },
+      {
+        path: "/create-identity",
+        layout: "/admin",
+        name: "Update Status",
+        mini: "AI",
+        component: CreateIdentity
+      },
+      {
+        path: "/create-identity",
+        layout: "/admin",
+        name: "View Participants",
+        mini: "VP",
+        component: CreateIdentity
+      },
+      {
+        path: "/create-identity",
+        layout: "/admin",
+        name: "Track an Item",
+        mini: "TI",
+        component: CreateIdentity
+      },
+    ]
+  },
   
 ];
 export default routes;
