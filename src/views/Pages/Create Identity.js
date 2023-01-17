@@ -33,7 +33,7 @@ function CreateIdentity() {
       const {data} = await axios.get(`${BACKEND_URL}/identity/create/${accounts[0]}`);
       setKey(data.publicKey);
       const hash = await createIdentity(data.publicKey, accounts[0]);
-      setAlert(true);
+      setSuccess(true);
       
     }
   

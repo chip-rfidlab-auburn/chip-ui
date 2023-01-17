@@ -2,8 +2,15 @@
 const Web3 = require('web3');
 import * as IPFS from 'ipfs-core'
 import config from './config.json'
+const NODE_URL = process.env.REACT_APP_NODE_URL;
+const provider = new Web3.providers.HttpProvider(NODE_URL);
+const web3 = new Web3(provider);
+const contract = new web3.eth.Contract(config.ABI, config.CONTRACT);
+//const ACCOUNT = web3.eth.accounts.privateKeyToAccount(process.env.PRIVATE_KEY);
+const ACCOUNT = web3.eth.accounts.wallet.add(process.env.REACT_APP_PRIVATE_KEY);
 
 export async function Connect() {
+    /*
     let ethAccounts;
     if (window.ethereum) {
         ethAccounts = await window.ethereum.request({method: 'eth_requestAccounts'});
@@ -11,21 +18,21 @@ export async function Connect() {
     } else {
         //no eth
     }
-    return ethAccounts;
+    */
+    return [ACCOUNT.address]
+    //return ethAccounts;
 }
 
 export async function createIdentity(key, address) {
     const ipfs = await IPFS.create();
     const result = await ipfs.add(JSON.stringify(key));
-    
-    const web3 = new Web3(window.ethereum);
-    const contract = new web3.eth.Contract(config.ABI, config.CONTRACT);
+    console.log(ACCOUNT);
     try{
-        await contract.methods.createIdentity(result.path).send({from: address});
-    }catch(err) {
-        console.log(err)
-    } finally {
-        return ({success: true})
+        const txn = await contract.methods.createIdentity().send({from: ACCOUNT.address, gas: 300000});
+        return true;
+    } catch (err) {
+        return false;
     }
-
+    
+    
 }
