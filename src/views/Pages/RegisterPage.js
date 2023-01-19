@@ -19,7 +19,7 @@ function RegisterPage() {
     <>
       <div
         className="full-page register-page section-image"
-        data-color="orange"
+        data-color="blue"
         data-image={require("assets/img/bg5.jpg")}
       >
         <div className="content d-flex align-items-center">
@@ -30,10 +30,10 @@ function RegisterPage() {
                   <Col md="8">
                     <div className="header-text">
                       <Card.Title as="h2">
-                        Light Bootstrap Dashboard PRO
+                        CHIP @ RFID Lab
                       </Card.Title>
                       <Card.Subtitle as="h4">
-                        Register for free and experience the dashboard today
+                        Register for free and experience the innovative and transparent supply chain solutions today
                       </Card.Subtitle>
                       <hr></hr>
                     </div>
@@ -50,11 +50,10 @@ function RegisterPage() {
                         </div>
                       </div>
                       <Media.Body>
-                        <h4>Free Account</h4>
+                        <h4>Wallet Support</h4>
                         <p>
-                          Here you can write a feature description for your
-                          dashboard, let the users know what is the value that
-                          you give them.
+                          Here, you will be provided with an Ethereum compatible wallet to perform transactions directly with
+                          the network.
                         </p>
                       </Media.Body>
                     </Media>
@@ -65,11 +64,10 @@ function RegisterPage() {
                         </div>
                       </div>
                       <Media.Body>
-                        <h4>Awesome Performances</h4>
+                        <h4>Low cost transactions</h4>
                         <p>
-                          Here you can write a feature description for your
-                          dashboard, let the users know what is the value that
-                          you give them.
+                          Transactions take place on a low-cost Ethereum compatible network, providing you with the savings you've 
+                          never seen before.
                         </p>
                       </Media.Body>
                     </Media>
@@ -80,11 +78,10 @@ function RegisterPage() {
                         </div>
                       </div>
                       <Media.Body>
-                        <h4>Global Support</h4>
+                        <h4>Blockchain integrated solution</h4>
                         <p>
-                          Here you can write a feature description for your
-                          dashboard, let the users know what is the value that
-                          you give them.
+                          All transactions are recorded onto the blockchain, therefore providing enhanced level
+                          of transparency.
                         </p>
                       </Media.Body>
                     </Media>

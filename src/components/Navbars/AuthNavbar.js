@@ -25,8 +25,8 @@ function AuthNavbar() {
         <Container>
           <div className="navbar-wrapper">
             <Navbar.Brand href="#pablo" onClick={(e) => e.preventDefault()}>
-              <span className="d-none d-md-block">Light Bootstrap Dashboard Pro React</span>
-              <span className="d-block d-md-none">LBDP React</span>
+              <span className="d-none d-md-block">CHIP @ RFID Lab</span>
+              <span className="d-block d-md-none">CHIP</span>
             </Navbar.Brand>
           </div>
           <button

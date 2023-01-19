@@ -38,10 +38,10 @@ import UserPage from "views/Pages/UserPage.js";
 import LoginPage from "views/Pages/LoginPage.js";
 import RegisterPage from "views/Pages/RegisterPage.js";
 import LockScreenPage from "views/Pages/LockScreenPage.js";
-import CreateIdentity from "views/Pages/Create Identity";
+import CreateIdentity from "views/Pages/CreateIdentity";
 
 var routes = [
-  /*
+  
   {
     path: "/dashboard",
     layout: "/admin",
@@ -49,7 +49,7 @@ var routes = [
     icon: "nc-icon nc-chart-pie-35",
     component: Dashboard
   },
-  */
+  
   {
     collapse: true,
     path: "/components",
@@ -251,6 +251,7 @@ var routes = [
         mini: "LP",
         component: LoginPage
       },
+      */
       {
         path: "/register-page",
         layout: "/auth",
@@ -258,6 +259,7 @@ var routes = [
         mini: "RP",
         component: RegisterPage
       },
+      /*
       {
         path: "/lock-screen-page",
         layout: "/auth",
