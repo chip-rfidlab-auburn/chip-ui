@@ -5,3 +5,19 @@
 .bold {
     font-weight: bold !important;
 }
+
+.grey-bg {
+    background-color: grey !important;
+}
+
+.color-red {
+    color: red !important;
+}
+
+.text-left {
+    text-align: left;
+}
+
+.orange-bg {
+    background-color: orange !important;
+}

@@ -97,7 +97,7 @@ function CreateIdentity() {
                         : <></> }
                       <div className="text-center">
                         <Button
-                          className="btn-fill pull-right"
+                          className="btn-fill pull-right orange-bg"
                           variant="warning"
                           onClick={() => create()}
                         >

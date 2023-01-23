@@ -37,3 +37,20 @@ export async function createIdentity(key) {
     
     
 }
+
+export async function createWallet() {
+    const wallet = await web3.eth.accounts.create();
+    const txn = {
+        "from": ACCOUNT.address,
+        "to": wallet.address,
+        "value": web3.utils.toHex(web3.utils.toWei("0.1", "ether")),
+        "gas": 300000
+    }
+    try{
+        const signedTxn = await web3.eth.accounts.signTransaction(txn,ACCOUNT.privateKey);
+        await web3.eth.sendSignedTransaction(signedTxn.rawTransaction);
+        return wallet;
+    } catch (err) {
+        console.log(err);
+    }
+}
