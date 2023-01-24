@@ -20,8 +20,19 @@ import {
   Row,
   Col
 } from "react-bootstrap";
+import axios from "axios";
+import { BACKEND_URL } from "assets/js/constants";
 
 function Dashboard() {
+
+  React.useEffect(() => {
+    async function getSession(){
+      const session = await axios.get(`${BACKEND_URL}/users/session`, {withCredentials: true});
+      console.log(session.data);
+    }
+    getSession()
+  }, [])
+
   return (
     <>
       <Container fluid>

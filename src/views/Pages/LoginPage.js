@@ -29,6 +29,11 @@ function LoginPage() {
     const {data} = await axios.post(`${BACKEND_URL}/users/login`, {
       username: userName,
       password: password
+    }, {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      withCredentials: true
     });
     if(data.success) {
       window.location.href = "/admin/dashboard"

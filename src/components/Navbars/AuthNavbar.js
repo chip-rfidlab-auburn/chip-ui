@@ -40,12 +40,13 @@ function AuthNavbar() {
           </button>
           <Navbar.Collapse className="justify-content-end" in={collapseOpen}>
             <Nav navbar>
+              {false ? 
               <Nav.Item className="mr-1">
                 <Nav.Link to="/admin/dashboard" as={Link}>
                   <i className="nc-icon nc-chart-pie-35"></i>
                   Dashboard
                 </Nav.Link>
-              </Nav.Item>
+              </Nav.Item> : <></> }
               <Nav.Item
                 className={
                   location.pathname === "/auth/register-page"
@@ -70,6 +71,7 @@ function AuthNavbar() {
                   Login
                 </Nav.Link>
               </Nav.Item>
+              {false ? 
               <Nav.Item
                 className={
                   location.pathname === "/auth/lock-screen-page"
@@ -81,7 +83,7 @@ function AuthNavbar() {
                   <i className="nc-icon nc-key-25"></i>
                   Lock
                 </Nav.Link>
-              </Nav.Item>
+              </Nav.Item> : <></> }
             </Nav>
           </Navbar.Collapse>
         </Container>

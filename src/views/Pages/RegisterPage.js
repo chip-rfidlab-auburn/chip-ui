@@ -68,7 +68,7 @@ function RegisterPage() {
       if(acc.data.success) {
         const accounts = await Connect();
         if(accounts.length > 0) {
-          const {data} = await axios.get(`${BACKEND_URL}/identity/create/${accounts[0]}`);
+          const {data} = await axios.get(`${BACKEND_URL}/identity/create/${wallet.address}`);
           await createIdentity(data.publicKey);
           console.log("Here");
           setSuccess(true);
