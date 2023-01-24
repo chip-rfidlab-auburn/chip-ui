@@ -1,3 +1,5 @@
+import { BACKEND_URL } from "assets/js/constants";
+import axios from "axios";
 import React from "react";
 
 // react-bootstrap components
@@ -19,6 +21,20 @@ function LoginPage() {
       setCardClasses("");
     }, 1000);
   });
+
+  const [userName, setUserName] = React.useState('');
+  const [password, setPassword] = React.useState('');
+
+  const login = async () => {
+    const {data} = await axios.post(`${BACKEND_URL}/users/login`, {
+      username: userName,
+      password: password
+    });
+    if(data.success) {
+      window.location.href = "/admin/dashboard"
+    }
+  }
+
   return (
     <>
       <div
@@ -37,10 +53,11 @@ function LoginPage() {
                   <Card.Body>
                     <Card.Body>
                       <Form.Group>
-                        <label>Email address</label>
+                        <label>Username</label>
                         <Form.Control
-                          placeholder="Enter email"
-                          type="email"
+                          placeholder="Username"
+                          type="text"
+                          onChange={(e) => setUserName(e.target.value)}
                         ></Form.Control>
                       </Form.Group>
                       <Form.Group>
@@ -48,22 +65,14 @@ function LoginPage() {
                         <Form.Control
                           placeholder="Password"
                           type="password"
+                          onChange={(e) => setPassword(e.target.value)}
                         ></Form.Control>
                       </Form.Group>
-                      <Form.Check className="pl-0">
-                        <Form.Check.Label>
-                          <Form.Check.Input
-                            defaultChecked
-                            type="checkbox"
-                          ></Form.Check.Input>
-                          <span className="form-check-sign"></span>
-                          Subscribe to newsletter
-                        </Form.Check.Label>
-                      </Form.Check>
+                      
                     </Card.Body>
                   </Card.Body>
                   <Card.Footer className="ml-auto mr-auto">
-                    <Button className="btn-wd" type="submit" variant="warning">
+                    <Button className="btn-wd orange-bg" onClick={() => login()} variant="warning">
                       Login
                     </Button>
                   </Card.Footer>

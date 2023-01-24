@@ -243,7 +243,7 @@ var routes = [
         mini: "ID",
         component: CreateIdentity
       },
-      /*
+      
       {
         path: "/login-page",
         layout: "/auth",
@@ -251,7 +251,7 @@ var routes = [
         mini: "LP",
         component: LoginPage
       },
-      */
+      
       {
         path: "/register-page",
         layout: "/auth",

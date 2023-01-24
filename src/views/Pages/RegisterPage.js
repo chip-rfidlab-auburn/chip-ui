@@ -21,6 +21,8 @@ import Dropdown from "react-bootstrap/Dropdown"
 
 import SweetAlert from "react-bootstrap-sweetalert";
 
+import {Connect, createIdentity} from "../../assets/js/web3";
+
 function RegisterPage() {
 
   const [companies, setCompanies] = React.useState([]);
@@ -64,13 +66,19 @@ function RegisterPage() {
       };
       const acc = await axios.post(`${BACKEND_URL}/users/create`,body);
       if(acc.data.success) {
-        setSuccess(true);
+        const accounts = await Connect();
+        if(accounts.length > 0) {
+          const {data} = await axios.get(`${BACKEND_URL}/identity/create/${accounts[0]}`);
+          await createIdentity(data.publicKey);
+          console.log("Here");
+          setSuccess(true);
+        }
       }
     }
     
   }
 
-  const hideAlert = () => window.location.href="/admin/create-identity";
+  const hideAlert = () => window.location.href="/admin/dashboard";
 
   return (
     <>
