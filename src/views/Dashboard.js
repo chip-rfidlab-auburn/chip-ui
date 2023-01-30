@@ -25,16 +25,23 @@ import { BACKEND_URL } from "assets/js/constants";
 
 function Dashboard() {
 
+  const [sessionExists, setSessionExists] = React.useState(false);
+
   React.useEffect(() => {
     async function getSession(){
       const session = await axios.get(`${BACKEND_URL}/users/session`, {withCredentials: true});
-      console.log(session.data);
+      if(session.data.session.user) {
+        setSessionExists(true);
+      } else {
+        window.location.href = "/auth/login-page";
+      }
     }
     getSession()
   }, [])
 
   return (
     <>
+      {sessionExists ?
       <Container fluid>
         <Row>
           <Col lg="3" sm="6">
@@ -776,7 +783,7 @@ function Dashboard() {
             </Card>
           </Col>
         </Row>
-      </Container>
+      </Container> : <></>}
     </>
   );
 }

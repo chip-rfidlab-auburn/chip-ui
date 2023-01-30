@@ -70,9 +70,10 @@ function RegisterPage() {
         if(accounts.length > 0) {
           const {data} = await axios.get(`${BACKEND_URL}/identity/create/${wallet.address}`);
           await createIdentity(data.publicKey);
-          console.log("Here");
           setSuccess(true);
         }
+      } else {
+        setErrorMessage(acc.data.error);
       }
     }
     

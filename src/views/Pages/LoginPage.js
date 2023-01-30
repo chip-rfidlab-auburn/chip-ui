@@ -58,10 +58,10 @@ function LoginPage() {
                   <Card.Body>
                     <Card.Body>
                       <Form.Group>
-                        <label>Username</label>
+                        <label>Email</label>
                         <Form.Control
-                          placeholder="Username"
-                          type="text"
+                          placeholder="Email"
+                          type="email"
                           onChange={(e) => setUserName(e.target.value)}
                         ></Form.Control>
                       </Form.Group>
