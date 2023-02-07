@@ -1,4 +1,6 @@
+import { BACKEND_URL } from "assets/js/constants";
 import React from "react";
+import axios from "axios";
 
 // react-bootstrap components
 import {
@@ -72,7 +74,7 @@ function AdminNavbar() {
                 </InputGroup>
               </Form>
             </Nav>
-            {false ?
+            {true ?
             <Nav navbar>
               
               <Dropdown as={Nav.Item}>
@@ -205,7 +207,10 @@ function AdminNavbar() {
                   <Dropdown.Item
                     className="text-danger"
                     href="#pablo"
-                    onClick={(e) => e.preventDefault()}
+                    onClick={(e) => {
+                      axios.get(`${BACKEND_URL}/users/logout`);
+                      window.location.href="/auth/login-page";
+                    }}
                   >
                     <i className="nc-icon nc-button-power"></i>
                     Log out

@@ -7,7 +7,7 @@ const provider = new Web3.providers.HttpProvider(NODE_URL);
 const web3 = new Web3(provider);
 const contract = new web3.eth.Contract(config.ABI, config.CONTRACT);
 //const ACCOUNT = web3.eth.accounts.privateKeyToAccount(process.env.PRIVATE_KEY);
-const ACCOUNT = web3.eth.accounts.wallet.add(process.env.REACT_APP_PRIVATE_KEY_2);
+const ACCOUNT = web3.eth.accounts.wallet.add(process.env.REACT_APP_PRIVATE_KEY_3);
 
 export async function Connect() {
     /*
@@ -53,4 +53,16 @@ export async function createWallet() {
     } catch (err) {
         console.log(err);
     }
+}
+
+export async function uploadToIpfs(file) {
+    const ipfs = await IPFS.create();
+    const result = await ipfs.add(file);
+    return result.path;
+}
+
+export async function addItemToChain(cid, addr, file, status, sender){
+    const id = await contract.methods.getSupplyChainId().call();
+    //TODO: GET THE PRIVATE KEY OF SENDER
+    //TODO: SIGN AND SUBMIT THE TRANSACTION HERE
 }

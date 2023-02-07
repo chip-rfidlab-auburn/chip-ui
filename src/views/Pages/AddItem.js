@@ -23,6 +23,9 @@ import { Connect } from "assets/js/web3";
 import axios from "axios";
 import { BACKEND_URL, EDI_TRANSACTIONS, ITEM_TYPES } from "assets/js/constants";
 import { createIdentity } from "assets/js/web3";
+import { uploadToIpfs } from "assets/js/web3";
+import { CompactEncrypt, importJWK } from "jose";
+import { addItemToChain } from "assets/js/web3";
 
 function AddItem() {
   const [key, setKey] = React.useState(key);
@@ -35,6 +38,8 @@ function AddItem() {
   const [selectedOrganization, setSelectedOrganization] = React.useState("");
   const [status, setStatus] = React.useState("");
   const [selectedItemType, setSelectedItemType] = React.useState("");
+  const [file,setFile] = React.useState();
+  const [identity, setIdentity] = React.useState({});
 
   React.useEffect(() => {
     async function getOrganizations(){
@@ -58,17 +63,36 @@ function AddItem() {
     getUsers();
   }, [selectedOrganization])
 
-  const create = async () => {
-  
-    const accounts = await Connect();
-    if(accounts.length > 0) {
-      const {data} = await axios.get(`${BACKEND_URL}/identity/create/${accounts[0]}`);
-      setKey(data.publicKey);
-      const hash = await createIdentity(data.publicKey);
-      setSuccess(true);
-      
+  const addItem = async () => {
+    const key = {
+      crv: identity.crv,
+      kty: identity.kty,
+      x: identity.x,
+      y: identity.y
+    };
+
+    const content = new TextEncoder().encode(file);
+    const encrpytFile = await axios.post(`${BACKEND_URL}/supplychain/add-item`, {
+      content: file,
+      key: key
+    });
+
+    if(encrpytFile.data.success){
+      const jwe = encrpytFile.data.jwe;
+      const status = await addItemToChain(jwe, identity.address, selectedItemType, status);
     }
-  
+    
+  }
+
+  const readFile = async (event) => {
+    var input = event.target.files[0];
+
+    var reader = new FileReader();
+    reader.onload = function() {
+      var text = reader.result;
+      setFile(text);
+    };
+    reader.readAsText(input);
   }
 
   const hideAlert = () => window.location.href = "/admin/dashboard"
@@ -106,7 +130,7 @@ function AddItem() {
                           <p className="ms-font">The files you upload here will be encrypted and only the user specified below will be able to read the contents.</p>
                           <Form.Group controlId="formFile" className="mb-3">
                             <Form.Label>Upload File</Form.Label>
-                            <Form.Control type="file" />
+                            <Form.Control onChange={(e) => readFile(e)} type="file" />
                           </Form.Group>
                         </Col>
                         <Col xs="12" md="6" className="gap-top">
@@ -135,7 +159,11 @@ function AddItem() {
 
                               <Dropdown.Menu>
                                 {users.length > 0 && users.map(user => 
-                                  <Dropdown.Item key={user.id} onClick={() => setSelectedUser(user.username)}>{user.username + '@' + user.email_extension}</Dropdown.Item>
+                                  <Dropdown.Item key={user.id} onClick={async () => {
+                                    setSelectedUser(user.username);
+                                    const userInfo = await axios.get(`${BACKEND_URL}/users?username=${user.username}`);
+                                    setIdentity(userInfo.data.users[0].identity);
+                                  }}>{user.username + '@' + user.email_extension}</Dropdown.Item>
                                 )}
                               
                               </Dropdown.Menu>
@@ -191,7 +219,7 @@ function AddItem() {
                         <Button
                           className="btn-fill pull-right orange-bg"
                           variant="warning"
-                          onClick={() => create()}
+                          onClick={() => addItem()}
                         >
                           Add Item
                         </Button>
