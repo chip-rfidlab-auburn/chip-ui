@@ -39,6 +39,7 @@ import LoginPage from "views/Pages/LoginPage.js";
 import RegisterPage from "views/Pages/RegisterPage.js";
 import LockScreenPage from "views/Pages/LockScreenPage.js";
 import CreateIdentity from "views/Pages/CreateIdentity";
+import AddItem from "views/Pages/AddItem"
 
 var routes = [
   
@@ -237,14 +238,6 @@ var routes = [
         component: UserPage
       },
       {
-        path: "/create-identity",
-        layout: "/admin",
-        name: "Create Identity",
-        mini: "ID",
-        component: CreateIdentity
-      },
-      
-      {
         path: "/login-page",
         layout: "/auth",
         name: "Login Page",
@@ -277,11 +270,11 @@ var routes = [
     icon: "nc-icon nc-app",
     views: [
       {
-        path: "/create-identity",
+        path: "/add-item",
         layout: "/admin",
         name: "Add an Item",
         mini: "AI",
-        component: CreateIdentity
+        component: AddItem
       },
       {
         path: "/create-identity",
