@@ -40,6 +40,7 @@ function AddItem() {
   const [selectedItemType, setSelectedItemType] = React.useState("");
   const [file,setFile] = React.useState();
   const [identity, setIdentity] = React.useState({});
+  const [user, setUser] = React.useState('');
 
   React.useEffect(() => {
     async function getOrganizations(){
@@ -50,6 +51,18 @@ function AddItem() {
     setItemTypes(EDI_TRANSACTIONS);
     setStatusTypes(ITEM_TYPES)
   }, []);
+
+  React.useEffect(() => {
+    async function getSession(){
+      const session = await axios.get(`${BACKEND_URL}/users/session`, {withCredentials: true});
+      if(session.data.session.user) {
+        setUser(session.data.session.user);
+      } else {
+        window.location.href = "/auth/login-page";
+      }
+    }
+    getSession()
+  }, [])
 
   React.useEffect(() => {
     async function getUsers(){
@@ -79,7 +92,10 @@ function AddItem() {
 
     if(encrpytFile.data.success){
       const jwe = encrpytFile.data.jwe;
-      const status = await addItemToChain(jwe, identity.address, selectedItemType, status);
+      const statusOfAdding = await addItemToChain(jwe, identity.address, selectedItemType, status, user);
+      if(statusOfAdding) {
+        setSuccess(true);
+      }
     }
     
   }
@@ -109,7 +125,7 @@ function AddItem() {
           onCancel={() => hideAlert()}
           confirmBtnBsStyle="info"
         >
-          Successfully created your identity
+          Successfully added an item!
         </SweetAlert> : <></> }
         <div className="section-image ms-font" data-image="../../assets/img/bg5.jpg" >
           {/* you can change the color of the filter page using: data-color="blue | purple | green | orange | red | rose " */}
