@@ -55,8 +55,8 @@ function Dashboard() {
                   </Col>
                   <Col xs="7">
                     <div className="numbers">
-                      <p className="card-category">Number</p>
-                      <Card.Title as="h4">150GB</Card.Title>
+                      <p className="card-category">Organizations</p>
+                      <Card.Title as="h4">37</Card.Title>
                     </div>
                   </Col>
                 </Row>
@@ -102,7 +102,7 @@ function Dashboard() {
                 <Row>
                   <Col xs="5">
                     <div className="icon-big text-center icon-warning">
-                      <i className="nc-icon nc-vector text-danger"></i>
+                      <i className="nc-icon nc-vector text-info"></i>
                     </div>
                   </Col>
                   <Col xs="7">

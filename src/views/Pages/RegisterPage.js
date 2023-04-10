@@ -28,7 +28,6 @@ function RegisterPage() {
   const [companies, setCompanies] = React.useState([]);
 
   const [company, setCompany] = React.useState();
-  const [userName, setUserName] = React.useState('');
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [passwordsMatch, setPasswordsMatch] = React.useState(false);
@@ -46,37 +45,47 @@ function RegisterPage() {
   const createAccount = async () => {
     const extension = email.split('@')[1];
     const selected_company = companies.find(Company => Company.name === company);
+    console.log(selected_company);
     if(selected_company.email_extension !== extension) {
       setErrorMessage(`Expected an email with domain ${selected_company.email_extension}`);
       return;
     }
     
     const wallet = await createWallet();
-    const saveWallet = await axios.post(`${BACKEND_URL}/wallets/save`, {
+    const {data} = await axios.get(`${BACKEND_URL}/identity/create`);
+    const body = {
+      email: email,
+      password: password,
+      organisation: selected_company.id,
+      wallet_address: wallet.address,
+      private_key: wallet.privateKey,
       address: wallet.address,
-      private_key: wallet.privateKey
-    });
-    if(saveWallet.data.success) {
-
-      const body = {
-        username: userName,
-        password: password,
-        email_extension: extension,
-        wallet_address: wallet.address
-      };
-      const acc = await axios.post(`${BACKEND_URL}/users/create`,body);
-      if(acc.data.success) {
-        const accounts = await Connect();
-        if(accounts.length > 0) {
-          const {data} = await axios.get(`${BACKEND_URL}/identity/create/${wallet.address}`);
-          await createIdentity(data.publicKey);
-          setSuccess(true);
-        }
-      } else {
-        setErrorMessage(acc.data.error);
+      key_kty: data.privateKey.kty,
+      key_x: data.privateKey.x,
+      key_y: data.privateKey.y,
+      key_d: data.privateKey.d,
+      key_crv: data.privateKey.crv,
+      admin: 0,
+      read_perm: 0,
+      send_perm: 0,
+      assign_perm: 0
+    };
+    const acc = await axios.post(`${BACKEND_URL}/users/create`,body);
+    if(acc.data.success) {
+      setSuccess(true);
+      /*
+      const accounts = await Connect();
+      if(accounts.length > 0) {
+        const {data} = await axios.get(`${BACKEND_URL}/identity/create/${wallet.address}`);
+        await createIdentity(data.publicKey);
+        setSuccess(true);
       }
+      */
+    } else {
+      console.log(acc.data.error);
+      setErrorMessage(acc.data.error);
     }
-    
+   
   }
 
   const hideAlert = () => window.location.href="/admin/dashboard";
@@ -167,27 +176,19 @@ function RegisterPage() {
                     <Form action="#" method="#">
                       <Card className="card-plain">
                         <div className="card-body">
-                          
-                          <Form.Group>
-                            <Form.Control
-                              placeholder="Your User Name"
-                              type="text"
-                              onChange={(e) => setUserName(e.target.value)}
-                            ></Form.Control>
-                          </Form.Group>
-                          
-                            <Dropdown style={{textAlign:'left'}}>
-                              <Dropdown.Toggle variant="secondary" id="dropdown-basic" className="grey-bg">
-                                {company && company.length > 0 ? company : "Company"}
-                              </Dropdown.Toggle>
+                         
+                          <Dropdown style={{textAlign:'left'}}>
+                            <Dropdown.Toggle variant="secondary" id="dropdown-basic" className="grey-bg">
+                              {company && company.length > 0 ? company : "Company"}
+                            </Dropdown.Toggle>
 
-                              <Dropdown.Menu>
-                                {companies.length > 0 && companies.map(company => 
-                                  <Dropdown.Item key={company.id} onClick={() => setCompany(company.name)}>{company.name}</Dropdown.Item>
-                                )}
-                              
-                              </Dropdown.Menu>
-                            </Dropdown>
+                            <Dropdown.Menu>
+                              {companies.length > 0 && companies.map(company => 
+                                <Dropdown.Item key={company.id} onClick={() => setCompany(company.name)}>{company.name}</Dropdown.Item>
+                              )}
+                            
+                            </Dropdown.Menu>
+                          </Dropdown>
                           
                           <Form.Group>
                             <Form.Control

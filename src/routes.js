@@ -40,6 +40,8 @@ import RegisterPage from "views/Pages/RegisterPage.js";
 import LockScreenPage from "views/Pages/LockScreenPage.js";
 import CreateIdentity from "views/Pages/CreateIdentity";
 import AddItem from "views/Pages/AddItem"
+import ViewItems from "views/Pages/ViewItems"
+import Users from "views/Pages/ViewUsers";
 
 var routes = [
   
@@ -50,7 +52,7 @@ var routes = [
     icon: "nc-icon nc-chart-pie-35",
     component: Dashboard
   },
-  
+  /*
   {
     collapse: true,
     path: "/components",
@@ -176,7 +178,7 @@ var routes = [
       }
     ]
   },
-  /*
+  
   {
     collapse: true,
     path: "/maps",
@@ -207,7 +209,7 @@ var routes = [
       }
     ]
   },
-  */
+  
   {
     path: "/charts",
     layout: "/admin",
@@ -222,7 +224,7 @@ var routes = [
     icon: "nc-icon nc-single-copy-04",
     component: Calendar
   },
-  
+  */
   {
     collapse: true,
     path: "/pages",
@@ -275,28 +277,19 @@ var routes = [
         name: "Add an Item",
         mini: "AI",
         component: AddItem
-      },
-      {
-        path: "/create-identity",
+      },{
+        path: "/view-supply-chain",
         layout: "/admin",
-        name: "Update Status",
-        mini: "AI",
-        component: CreateIdentity
-      },
-      {
-        path: "/create-identity",
+        name: "View Chain",
+        mini: "VC",
+        component: ViewItems
+      },{
+        path: "/users",
         layout: "/admin",
-        name: "View Participants",
-        mini: "VP",
-        component: CreateIdentity
-      },
-      {
-        path: "/create-identity",
-        layout: "/admin",
-        name: "Track an Item",
-        mini: "TI",
-        component: CreateIdentity
-      },
+        name: "Users",
+        mini: "US",
+        component: Users
+      }
     ]
   },
   

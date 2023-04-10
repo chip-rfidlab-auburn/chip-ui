@@ -9,7 +9,7 @@ const provider = new Web3.providers.HttpProvider(NODE_URL);
 const web3 = new Web3(provider);
 const contract = new web3.eth.Contract(config.ABI, config.CONTRACT);
 //const ACCOUNT = web3.eth.accounts.privateKeyToAccount(process.env.PRIVATE_KEY);
-const ACCOUNT = web3.eth.accounts.wallet.add(process.env.REACT_APP_PRIVATE_KEY);
+const ACCOUNT = web3.eth.accounts.wallet.add(process.env.REACT_APP_PRIVATE_KEY_3);
 
 export async function Connect() {
     /*
@@ -64,16 +64,14 @@ export async function uploadToIpfs(file) {
 }
 
 export async function addItemToChain(cid, addr, file, status, sender){
+    console.log(cid, addr, file, status);
     const id = await contract.methods.getSupplyChainId().call();
-    
+    console.log(id);
     //TODO: GET THE PRIVATE KEY OF SENDER
     //TODO: SIGN AND SUBMIT THE TRANSACTION HERE
-    console.log(addr, file, status, sender);
     const privateKey = await axios.get(`${BACKEND_URL}/users?username=${sender.split('@')[0]}`);
     if(privateKey.data.users.length > 0) {
         const ACC = web3.eth.accounts.wallet.add(privateKey.data.users[0].wallet.private_key);
-        //const ACC = web3.eth.accounts.wallet.add("d198b489075d8a59106ba66ba080a032101d0c3bd9b96fc703f60cfc04226c2a");
-        //console.log(ACC.address);
         try{
             await contract.methods.updateSupplyChainMovement(id,cid,addr,file,status).send({from: ACC.address, gas: 3000000});
             return true;
@@ -83,4 +81,15 @@ export async function addItemToChain(cid, addr, file, status, sender){
 
         }
     }
+}
+
+export async function getSupplyChainInformation(){
+    const id = await contract.methods.getSupplyChainId().call();
+    for(let i=0; i<id; i++){
+        const itemState = await contract.methods.getSupplyChainInformation(id).call();
+    }
+}
+
+export async function getIdentity(){
+    const info = await contract.methods.getIdentity('0xc092a7b7384159C68Ac44Ef157Ab48f6F20B1028').call();
 }

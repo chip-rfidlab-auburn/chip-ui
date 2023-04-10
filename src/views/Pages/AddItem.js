@@ -84,7 +84,7 @@ function AddItem() {
       y: identity.y
     };
 
-    const content = new TextEncoder().encode(file);
+    //const content = new TextEncoder().encode(file);
     const encrpytFile = await axios.post(`${BACKEND_URL}/supplychain/add-item`, {
       content: file,
       key: key

@@ -27,7 +27,7 @@ function LoginPage() {
 
   const login = async () => {
     const {data} = await axios.post(`${BACKEND_URL}/users/login`, {
-      username: userName,
+      email: userName,
       password: password
     }, {
       headers: {
