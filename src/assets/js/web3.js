@@ -2,14 +2,25 @@
 const Web3 = require('web3');
 import axios from 'axios';
 import * as IPFS from 'ipfs-core'
+import {create} from 'ipfs-http-client';
 import config from './config.json'
-import { BACKEND_URL } from './constants';
+import { BACKEND_URL, IPFS_PROJECT_ID, IPFS_PROJECT_SECRET } from './constants';
+import { Buffer } from 'buffer';
 const NODE_URL = process.env.REACT_APP_NODE_URL;
 const provider = new Web3.providers.HttpProvider(NODE_URL);
 const web3 = new Web3(provider);
 const contract = new web3.eth.Contract(config.ABI, config.CONTRACT);
 //const ACCOUNT = web3.eth.accounts.privateKeyToAccount(process.env.PRIVATE_KEY);
 const ACCOUNT = web3.eth.accounts.wallet.add(process.env.REACT_APP_PRIVATE_KEY_3);
+const auth = 'Basic ' + Buffer.from(IPFS_PROJECT_ID + ':' + IPFS_PROJECT_SECRET).toString('base64');
+const ipfsClient = create({
+    host: 'ipfs.infura.io',
+    port: 5001,
+    protocol: 'https',
+    headers: {
+        authorization: auth
+    }
+})
 
 export async function Connect() {
     /*
@@ -58,8 +69,7 @@ export async function createWallet() {
 }
 
 export async function uploadToIpfs(file) {
-    const ipfs = await IPFS.create();
-    const result = await ipfs.add(file);
+    const result = await ipfsClient.add(file);
     return result.path;
 }
 

@@ -36,11 +36,12 @@ function AddItem() {
   const [itemTypes, setItemTypes] = React.useState([])
   const [selectedUser, setSelectedUser] = React.useState("");
   const [selectedOrganization, setSelectedOrganization] = React.useState("");
+  const [organizationId, setOrganizationId] = React.useState('');
   const [status, setStatus] = React.useState("");
   const [selectedItemType, setSelectedItemType] = React.useState("");
   const [file,setFile] = React.useState();
   const [identity, setIdentity] = React.useState({});
-  const [user, setUser] = React.useState('');
+  const [currentUser, setCurrentUser] = React.useState('');
 
   React.useEffect(() => {
     async function getOrganizations(){
@@ -56,7 +57,7 @@ function AddItem() {
     async function getSession(){
       const session = await axios.get(`${BACKEND_URL}/users/session`, {withCredentials: true});
       if(session.data.session.user) {
-        setUser(session.data.session.user);
+        setCurrentUser(session.data.session.user);
       } else {
         window.location.href = "/auth/login-page";
       }
@@ -66,9 +67,7 @@ function AddItem() {
 
   React.useEffect(() => {
     async function getUsers(){
-      const extension = organizations.find(organization => organization.name === selectedOrganization);
-      if(!extension) return;
-      const {data} = await axios.get(`${BACKEND_URL}/users?extension=${extension.email_extension}`);
+      const {data} = await axios.get(`${BACKEND_URL}/users?organization=${organizationId}`, {withCredentials: true});
       if(data.users){
         setUsers(data.users);
       }
@@ -77,23 +76,34 @@ function AddItem() {
   }, [selectedOrganization])
 
   const addItem = async () => {
+    const user = users.find(exampleUser => exampleUser.email === selectedUser);
     const key = {
-      crv: identity.crv,
-      kty: identity.kty,
-      x: identity.x,
-      y: identity.y
-    };
-
-    //const content = new TextEncoder().encode(file);
-    const encrpytFile = await axios.post(`${BACKEND_URL}/supplychain/add-item`, {
+      crv: user.key_crv,
+      x: user.key_x,
+      y: user.key_y,
+      kty: user.key_kty
+    }
+    const encrpytFile = await axios.post(`${BACKEND_URL}/supplychain/encrypt`, {
       content: file,
       key: key
     });
-
+    const currentUserId = users.find(exampleUser => exampleUser.email === currentUser);
     if(encrpytFile.data.success){
       const jwe = encrpytFile.data.jwe;
-      const statusOfAdding = await addItemToChain(jwe, identity.address, selectedItemType, status, user);
-      if(statusOfAdding) {
+      const ipfsCid = await uploadToIpfs(jwe);
+      const body = {
+        edi_ipfs: ipfsCid,
+        user_from: currentUserId.email,
+        user_to: user.email
+      };
+
+      const {data} = await axios.post(`${BACKEND_URL}/supplychain/add-item`, body, {
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        withCredentials: true
+      });
+      if(data.success){
         setSuccess(true);
       }
     }
@@ -158,7 +168,10 @@ function AddItem() {
 
                             <Dropdown.Menu>
                               {organizations.length > 0 && organizations.map(organization => 
-                                <Dropdown.Item key={organization.id} onClick={() => setSelectedOrganization(organization.name)}>{organization.name}</Dropdown.Item>
+                                <Dropdown.Item key={organization.id} onClick={() => {
+                                  setSelectedOrganization(organization.name);
+                                  setOrganizationId(organization.id);
+                                }}>{organization.name}</Dropdown.Item>
                               )}
                             
                             </Dropdown.Menu>
@@ -176,10 +189,10 @@ function AddItem() {
                               <Dropdown.Menu>
                                 {users.length > 0 && users.map(user => 
                                   <Dropdown.Item key={user.id} onClick={async () => {
-                                    setSelectedUser(user.username);
-                                    const userInfo = await axios.get(`${BACKEND_URL}/users?username=${user.username}`);
-                                    setIdentity(userInfo.data.users[0].identity);
-                                  }}>{user.username + '@' + user.email_extension}</Dropdown.Item>
+                                    setSelectedUser(user.email);
+                                    // const userInfo = await axios.get(`${BACKEND_URL}/users?username=${user.username}`);
+                                    // setIdentity(userInfo.data.users[0].identity);
+                                  }}>{user.email}</Dropdown.Item>
                                 )}
                               
                               </Dropdown.Menu>

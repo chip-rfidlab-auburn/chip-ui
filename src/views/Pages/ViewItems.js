@@ -30,26 +30,18 @@ import { CompactEncrypt, importJWK } from "jose";
 import { addItemToChain } from "assets/js/web3";
 import { getSupplyChainInformation } from "assets/js/web3";
 import { getIdentity } from "assets/js/web3";
+import { IPFS_URL } from "assets/js/constants";
 
 function ViewItems() {
   const [key, setKey] = React.useState(key);
   const [success, setSuccess] = React.useState(false);
-  const [users, setUsers] = React.useState([]);
-  const [organizations, setOrganizations] = React.useState([]);
-  const [statusTypes, setStatusTypes] = React.useState([]);
-  const [itemTypes, setItemTypes] = React.useState([])
-  const [selectedUser, setSelectedUser] = React.useState("");
-  const [selectedOrganization, setSelectedOrganization] = React.useState("");
-  const [status, setStatus] = React.useState("");
-  const [selectedItemType, setSelectedItemType] = React.useState("");
-  const [file,setFile] = React.useState();
-  const [identity, setIdentity] = React.useState({});
-  const [user, setUser] = React.useState('');
+  const [transactions, setTransactions] = React.useState([]);
+  const [docInfo, setDocInfo] = React.useState('');
 
   React.useEffect(() => {
     async function getInformation(){
-      const info = await getSupplyChainInformation();
-      await getIdentity();
+      const {data} = await axios.get(`${BACKEND_URL}/supplychain/transactions`, {withCredentials: true});
+      setTransactions(data.transactions);
     }
     getInformation();
   }, [])
@@ -59,6 +51,14 @@ function ViewItems() {
   const [show, setShow] = React.useState(false);
   
   const handleClose = () => setShow(!show);
+
+  const viewDocument = async (docHash) => {
+    const getDoc = await axios.get(`${IPFS_URL}/${docHash}`);
+    console.log(getDoc.data);
+    const {data} = await axios.get(`${BACKEND_URL}/supplychain/decrypt/${getDoc.data}`, {withCredentials: true});
+    setDocInfo(data.decryptedDocument);
+    setShow(!show);
+  }
 
   return (
     <>
@@ -77,52 +77,10 @@ function ViewItems() {
 
         <Modal show={show} size="lg" onHide={handleClose}>
           <Modal.Header closeButton>
-            <Modal.Title>Nike - Shoes</Modal.Title>
+            <Modal.Title>Document</Modal.Title>
           </Modal.Header>
           <Modal.Body >
-            <h6>7 Transactions Found</h6>
-            <Table striped bordered hover>
-              <thead style={{textAlign:'center'}}>
-                <tr>
-                  <th>#</th>
-                  <th>Action</th>
-                  <th>Updated At</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-              <tbody style={{textAlign:'center'}}>
-                <tr>
-                  <td>1</td>
-                  <td>CREATE</td>
-                  <td>{new Date().toDateString()}</td>
-                  <td style={{color:'green'}}>Source Tag</td>
-                </tr>
-                <tr>
-                  <td>2</td>
-                  <td>UPDATE</td>
-                  <td>{new Date().toDateString()}</td>
-                  <td style={{color:'green'}}>Currently at Manufacturer Warehouse</td>
-                </tr>
-                <tr>
-                  <td>3</td>
-                  <td>READ</td>
-                  <td>{new Date().toDateString()}</td>
-                  <td style={{color:'green'}}>Received at Supplier Warehouse</td>
-                </tr>
-                <tr>
-                  <td>4</td>
-                  <td>UPDATE</td>
-                  <td>{new Date().toDateString()}</td>
-                  <td style={{color:'green'}}>Sent to Retailer Warehouse</td>
-                </tr>
-                <tr>
-                  <td>5</td>
-                  <td>READ</td>
-                  <td>{new Date().toDateString()}</td>
-                  <td style={{color:'green'}}>Received at Retailer Warehouse</td>
-                </tr>
-              </tbody>
-            </Table>
+            <p>{docInfo}</p>
           </Modal.Body>
           <Modal.Footer>
             <Button variant="secondary" onClick={handleClose}>
@@ -143,7 +101,7 @@ function ViewItems() {
                   <Card>
                     <Card.Header>
                       <Card.Header>
-                        <Card.Title as="h3" className="ms-font bold">Supply Chain Discovery</Card.Title>
+                        <Card.Title as="h3" className="ms-font bold">Supply Chain</Card.Title>
                       </Card.Header>
                     </Card.Header>
                     <Card.Body>
@@ -154,59 +112,22 @@ function ViewItems() {
                             <thead style={{textAlign:'center'}}>
                               <tr>
                                 <th>#</th>
-                                <th>Company</th>
-                                <th>Product</th>
-                                <th>Status</th>
-                                <th>Read More</th>
+                                <th>Sender</th>
+                                <th>Actions</th>
                               </tr>
                             </thead>
+                            {transactions && transactions.length > 0 ? 
                             <tbody style={{textAlign:'center'}}>
-                              <tr>
-                                <td>1</td>
-                                <td>Nike</td>
-                                <td>Shoes</td>
-                                <td style={{color:'green'}}>Currently at Retailer</td>
-                                <td>
-                                  <i onClick={() => setShow(!show)} style={{cursor: "pointer"}} className="nc-icon nc-zoom-split" />
-                                </td>
-                              </tr>
-                              <tr>
-                                <td>2</td>
-                                <td>Nike</td>
-                                <td>Apparel</td>
-                                <td style={{color:'green'}}>Currently at Retailer</td>
-                                <td>
-                                  <i onClick={() => setShow(!show)} style={{cursor: "pointer"}} className="nc-icon nc-zoom-split" />
-                                </td>
-                              </tr>
-                              <tr>
-                                <td>3</td>
-                                <td>Walmart</td>
-                                <td>Electronics</td>
-                                <td style={{color:'green'}}>Currently at Manufacturer Warehouse</td>
-                                <td>
-                                  <i onClick={() => setShow(!show)} style={{cursor: "pointer"}} className="nc-icon nc-zoom-split" />
-                                </td>
-                              </tr>
-                              <tr>
-                                <td>4</td>
-                                <td>Walmart</td>
-                                <td>Apparel</td>
-                                <td style={{color:'green'}}>Currently at Retailer</td>
-                                <td>
-                                  <i onClick={() => setShow(!show)} style={{cursor: "pointer"}} className="nc-icon nc-zoom-split" />
-                                </td>
-                              </tr>
-                              <tr>
-                                <td>5</td>
-                                <td>Wendy's</td>
-                                <td>Processed Food</td>
-                                <td style={{color:'green'}}>Currently at Retailer</td>
-                                <td>
-                                  <i onClick={() => setShow(!show)} style={{cursor: "pointer"}} className="nc-icon nc-zoom-split" />
-                                </td>
-                              </tr>
-                            </tbody>
+                              {transactions.map((transaction, index) => 
+                                <tr>
+                                  <td>{index+1}</td>
+                                  <td>{transaction.user_from}</td>
+                                  <td>
+                                    <i onClick={() => viewDocument(transaction.edi_ipfs)} style={{cursor: "pointer"}} className="nc-icon nc-attach-87" />
+                                  </td>
+                                </tr>
+                              )}
+                            </tbody> : <></> }
                           </Table>
                         </Col>
                       
