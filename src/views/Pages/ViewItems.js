@@ -46,7 +46,7 @@ function ViewItems() {
       const {data} = await axios.get(`${BACKEND_URL}/supplychain/transactions`, {withCredentials: true});
       setTransactions(data.transactions);
       const txnsSent = await axios.get(`${BACKEND_URL}/supplychain/transactions`, {withCredentials: true, params: {'type':'sent'}});
-      setTransactionsSent(txnsSent.data.transations);
+      setTransactionsSent(txnsSent.data.transactions);
     }
     getInformation();
   }, [])
@@ -121,6 +121,7 @@ function ViewItems() {
                                 <thead style={{textAlign:'center'}}>
                                   <tr>
                                     <th>#</th>
+                                    <th>Date</th>
                                     <th>Sender</th>
                                     <th>Actions</th>
                                   </tr>
@@ -130,6 +131,7 @@ function ViewItems() {
                                   {transactions.map((transaction, index) => 
                                     <tr>
                                       <td>{index+1}</td>
+                                      <td>{transaction.time}</td>
                                       <td>{transaction.user_from}</td>
                                       <td>
                                         <i onClick={() => viewDocument(transaction.edi_ipfs)} style={{cursor: "pointer"}} className="nc-icon nc-attach-87" />
@@ -147,8 +149,9 @@ function ViewItems() {
                               <Table striped bordered hover>
                                 <thead style={{textAlign:'center'}}>
                                   <tr>
+                                    <th>Date</th>
                                     <th>#</th>
-                                    <th>Sender</th>
+                                    <th>Receiver</th>
                                     <th>Actions</th>
                                   </tr>
                                 </thead>
@@ -156,8 +159,9 @@ function ViewItems() {
                                 <tbody style={{textAlign:'center'}}>
                                   {transactionsSent.map((transaction, index) => 
                                     <tr>
+                                      <td></td>
                                       <td>{index+1}</td>
-                                      <td>{transaction.user_from}</td>
+                                      <td>{transaction.user_to}</td>
                                       <td>
                                         <i onClick={() => viewDocument(transaction.edi_ipfs)} style={{cursor: "pointer"}} className="nc-icon nc-attach-87" />
                                       </td>
