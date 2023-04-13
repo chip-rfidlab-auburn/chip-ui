@@ -31,17 +31,22 @@ import { addItemToChain } from "assets/js/web3";
 import { getSupplyChainInformation } from "assets/js/web3";
 import { getIdentity } from "assets/js/web3";
 import { IPFS_URL } from "assets/js/constants";
+import Tab from 'react-bootstrap/Tab';
+import Tabs from 'react-bootstrap/Tabs';
 
 function ViewItems() {
   const [key, setKey] = React.useState(key);
   const [success, setSuccess] = React.useState(false);
   const [transactions, setTransactions] = React.useState([]);
+  const [transactionsSent, setTransactionsSent] = React.useState([]);
   const [docInfo, setDocInfo] = React.useState('');
 
   React.useEffect(() => {
     async function getInformation(){
       const {data} = await axios.get(`${BACKEND_URL}/supplychain/transactions`, {withCredentials: true});
       setTransactions(data.transactions);
+      const txnsSent = await axios.get(`${BACKEND_URL}/supplychain/transactions`, {withCredentials: true, params: {'type':'sent'}});
+      setTransactionsSent(txnsSent.data.transations);
     }
     getInformation();
   }, [])
@@ -54,7 +59,6 @@ function ViewItems() {
 
   const viewDocument = async (docHash) => {
     const getDoc = await axios.get(`${IPFS_URL}/${docHash}`);
-    console.log(getDoc.data);
     const {data} = await axios.get(`${BACKEND_URL}/supplychain/decrypt/${getDoc.data}`, {withCredentials: true});
     setDocInfo(data.decryptedDocument);
     setShow(!show);
@@ -105,34 +109,67 @@ function ViewItems() {
                       </Card.Header>
                     </Card.Header>
                     <Card.Body>
+                    <Tabs
+                        defaultActiveKey="received"
+                        id="uncontrolled-tab-example"
+                        className="mb-3"
+                      >
+                        <Tab eventKey="received" title="Transactions Received">
+                          <Row style={{marginTop:'3%'}} >
+                            <Col>
+                              <Table striped bordered hover>
+                                <thead style={{textAlign:'center'}}>
+                                  <tr>
+                                    <th>#</th>
+                                    <th>Sender</th>
+                                    <th>Actions</th>
+                                  </tr>
+                                </thead>
+                                {transactions && transactions.length > 0 ? 
+                                <tbody style={{textAlign:'center'}}>
+                                  {transactions.map((transaction, index) => 
+                                    <tr>
+                                      <td>{index+1}</td>
+                                      <td>{transaction.user_from}</td>
+                                      <td>
+                                        <i onClick={() => viewDocument(transaction.edi_ipfs)} style={{cursor: "pointer"}} className="nc-icon nc-attach-87" />
+                                      </td>
+                                    </tr>
+                                  )}
+                                </tbody> : <></> }
+                              </Table>
+                            </Col>
+                          </Row>
+                        </Tab>
+                        <Tab eventKey="sent" title="Transactions Sent">
+                          <Row style={{marginTop:'3%'}} >
+                            <Col>
+                              <Table striped bordered hover>
+                                <thead style={{textAlign:'center'}}>
+                                  <tr>
+                                    <th>#</th>
+                                    <th>Sender</th>
+                                    <th>Actions</th>
+                                  </tr>
+                                </thead>
+                                {transactionsSent && transactionsSent.length > 0 ? 
+                                <tbody style={{textAlign:'center'}}>
+                                  {transactionsSent.map((transaction, index) => 
+                                    <tr>
+                                      <td>{index+1}</td>
+                                      <td>{transaction.user_from}</td>
+                                      <td>
+                                        <i onClick={() => viewDocument(transaction.edi_ipfs)} style={{cursor: "pointer"}} className="nc-icon nc-attach-87" />
+                                      </td>
+                                    </tr>
+                                  )}
+                                </tbody> : <></> }
+                              </Table>
+                            </Col>
+                          </Row>
+                        </Tab>
+                      </Tabs>
                       
-                      <Row style={{marginTop:'3%'}} >
-                        <Col>
-                          <Table striped bordered hover>
-                            <thead style={{textAlign:'center'}}>
-                              <tr>
-                                <th>#</th>
-                                <th>Sender</th>
-                                <th>Actions</th>
-                              </tr>
-                            </thead>
-                            {transactions && transactions.length > 0 ? 
-                            <tbody style={{textAlign:'center'}}>
-                              {transactions.map((transaction, index) => 
-                                <tr>
-                                  <td>{index+1}</td>
-                                  <td>{transaction.user_from}</td>
-                                  <td>
-                                    <i onClick={() => viewDocument(transaction.edi_ipfs)} style={{cursor: "pointer"}} className="nc-icon nc-attach-87" />
-                                  </td>
-                                </tr>
-                              )}
-                            </tbody> : <></> }
-                          </Table>
-                        </Col>
-                      
-                        
-                      </Row>
                       {false ? 
                       <div className="text-center">
                         <Button
