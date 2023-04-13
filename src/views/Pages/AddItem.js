@@ -76,12 +76,14 @@ function AddItem() {
   }, [selectedOrganization])
 
   const addItem = async () => {
+    const {data} = await axios.get(`${BACKEND_URL}/organizations`, {withCredentials: true});
     const user = users.find(exampleUser => exampleUser.email === selectedUser);
+    const selectedOrganization = data.organizations.find(organization => organization.id === user.organisation);
     const key = {
-      crv: user.key_crv,
-      x: user.key_x,
-      y: user.key_y,
-      kty: user.key_kty
+      crv: selectedOrganization.key_crv,
+      x: selectedOrganization.key_x,
+      y: selectedOrganization.key_y,
+      kty: selectedOrganization.key_kty
     }
     const encrpytFile = await axios.post(`${BACKEND_URL}/supplychain/encrypt`, {
       content: file,

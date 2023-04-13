@@ -52,7 +52,6 @@ function RegisterPage() {
     }
     
     const wallet = await createWallet();
-    const {data} = await axios.get(`${BACKEND_URL}/identity/create`);
     const body = {
       email: email,
       password: password,
@@ -60,11 +59,6 @@ function RegisterPage() {
       wallet_address: wallet.address,
       private_key: wallet.privateKey,
       address: wallet.address,
-      key_kty: data.privateKey.kty,
-      key_x: data.privateKey.x,
-      key_y: data.privateKey.y,
-      key_d: data.privateKey.d,
-      key_crv: data.privateKey.crv,
       admin: 0,
       read_perm: 0,
       send_perm: 0,
@@ -88,7 +82,7 @@ function RegisterPage() {
    
   }
 
-  const hideAlert = () => window.location.href="/admin/dashboard";
+  const hideAlert = () => window.location.href="/auth/login-page";
 
   return (
     <>

@@ -131,7 +131,7 @@ function ViewItems() {
                                   {transactions.map((transaction, index) => 
                                     <tr>
                                       <td>{index+1}</td>
-                                      <td>{transaction.time}</td>
+                                      <td>{new Date(transaction.time*1000).toString().split('GMT')[0]}</td>
                                       <td>{transaction.user_from}</td>
                                       <td>
                                         <i onClick={() => viewDocument(transaction.edi_ipfs)} style={{cursor: "pointer"}} className="nc-icon nc-attach-87" />
@@ -149,8 +149,8 @@ function ViewItems() {
                               <Table striped bordered hover>
                                 <thead style={{textAlign:'center'}}>
                                   <tr>
-                                    <th>Date</th>
                                     <th>#</th>
+                                    <th>Date</th>
                                     <th>Receiver</th>
                                     <th>Actions</th>
                                   </tr>
@@ -159,8 +159,9 @@ function ViewItems() {
                                 <tbody style={{textAlign:'center'}}>
                                   {transactionsSent.map((transaction, index) => 
                                     <tr>
-                                      <td></td>
+                                      
                                       <td>{index+1}</td>
+                                      <td>{new Date(transaction.time*1000).toString().split('GMT')[0]}</td>
                                       <td>{transaction.user_to}</td>
                                       <td>
                                         <i onClick={() => viewDocument(transaction.edi_ipfs)} style={{cursor: "pointer"}} className="nc-icon nc-attach-87" />
