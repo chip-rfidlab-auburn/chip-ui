@@ -59,10 +59,10 @@ function RegisterPage() {
       wallet_address: wallet.address,
       private_key: wallet.privateKey,
       address: wallet.address,
-      admin: 0,
-      read_perm: 0,
-      send_perm: 0,
-      assign_perm: 0
+      admin: 1,
+      read_perm: 1,
+      send_perm: 1,
+      assign_perm: 1
     };
     const acc = await axios.post(`${BACKEND_URL}/users/create`,body);
     if(acc.data.success) {

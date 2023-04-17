@@ -53,6 +53,8 @@ export async function createIdentity(key) {
 
 export async function createWallet() {
     const wallet = await web3.eth.accounts.create();
+    return wallet;
+    /*
     const txn = {
         "from": ACCOUNT.address,
         "to": wallet.address,
@@ -66,6 +68,7 @@ export async function createWallet() {
     } catch (err) {
         console.log(err);
     }
+    */
 }
 
 export async function uploadToIpfs(file) {

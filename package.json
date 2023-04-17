@@ -2,6 +2,7 @@
   "name": "chip-ui",
   "version": "2.0.1",
   "private": true,
+  "homepage": "https://chip-rfidlab-auburn.github.io/chip-ui", 
   "dependencies": {
     "@fortawesome/fontawesome-free": "5.15.2",
     "axios": "^1.2.3",
@@ -43,9 +44,12 @@
     "install:clean": "rm -rf node_modules/ && rm -rf package-lock.json && npm install && npm start",
     "compile:scss": "sass src/assets/scss/light-bootstrap-dashboard-pro-react.scss src/assets/css/light-bootstrap-dashboard-pro-react.css",
     "minify:scss": "sass src/assets/scss/light-bootstrap-dashboard-pro-react.scss src/assets/css/light-bootstrap-dashboard-pro-react.min.css --style compressed",
-    "build:scss": "npm run compile:scss && npm run minify:scss"
+    "build:scss": "npm run compile:scss && npm run minify:scss",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "devDependencies": {
+    "gh-pages": "^5.0.0",
     "gulp": "4.0.2",
     "gulp-append-prepend": "1.0.9",
     "typescript": "4.7.4"
